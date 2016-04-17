@@ -36,17 +36,11 @@ def get_schedule_list list
 
   schedule = []
   list.each do |l|
-    result = l.find { |item| item[:col] == TARGET_COL}
-    if result
-      schedule << "#{l.first[:text]}: #{result[:text]}"
-
-    else
-      (TARGET_COL-1).downto(3) do |i|
-        result = l.find { |item| item[:col] == i}
-        if result
-          schedule << "#{l.first[:text]}: #{result[:text]}"
-          break
-        end
+    (TARGET_COL).downto(3) do |i|
+      result = l.find { |item| item[:col] == i}
+      if result
+        schedule << {date: l.first[:text], text: result[:text]}
+        break
       end
     end
   end
