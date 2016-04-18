@@ -1,6 +1,8 @@
 require 'open-uri'
 require 'json'
+require 'date'
 
+month = 4
 url = 'https://spreadsheets.google.com/feeds/cells/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y/od6/public/values?alt=json'
 
 def open_doc url
@@ -27,7 +29,7 @@ def parse_doc_json buff
   list
 end
 
-def get_schedule_list list
+def get_schedule_list list, month
   list.select! do |l|
     (! l.nil?) and
       (!l.first.nil?) and
@@ -39,7 +41,18 @@ def get_schedule_list list
     (TARGET_COL).downto(3) do |i|
       result = l.find { |item| item[:col] == i}
       if result
-        schedule << {date: l.first[:text], text: result[:text]}
+        
+        d = Date.new(2016, month, l.first[:text][/^\d{2}/].to_i)
+        context = result[:text].split("\n")
+
+        p context
+        m = context.first.match(/^(\d+:\d+).(\d+:\d+)?$/)
+        p m
+        start_time, end_time = m[1], m[2]
+
+        #schedule << {date: l.first[:text], text: result[:text]}
+        schedule << {date: d, start_time: start_time, end_time: end_time,
+                     context: context[1,]}
         break
       end
     end
@@ -54,7 +67,7 @@ contents_list = parse_doc_json buff
 
 
 TARGET_COL = 5
-schedule = get_schedule_list contents_list
+schedule = get_schedule_list contents_list, month
 
 require 'pp'
 pp schedule
