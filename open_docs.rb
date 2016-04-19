@@ -3,7 +3,16 @@ require 'json'
 require 'date'
 
 month = 4
-url = 'https://spreadsheets.google.com/feeds/cells/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y/od6/public/values?alt=json'
+cid = '1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y'
+wid = 'od6'
+#wid = '1434845912'
+url = "https://spreadsheets.google.com/feeds/cells/#{cid}/#{wid}/public/values?alt=json"
+
+=begin
+https://docs.google.com/spreadsheets/d/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y/pubhtml?gid=0&single=true
+https://docs.google.com/spreadsheets/d/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y/pubhtml?gid=1434845912&single=true
+https://spreadsheets.google.com/feeds/worksheets/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y/public/basic
+=end
 
 def open_doc url
   f = open(url)
@@ -43,16 +52,16 @@ def get_schedule_list list, month
       if result
         
         d = Date.new(2016, month, l.first[:text][/^\d{2}/].to_i)
-        context = result[:text].split("\n")
-
+        context = result[:text]
         p context
-        m = context.first.match(/^(\d+:\d+).(\d+:\d+)?$/)
+
+        m = context.match(/^(\d+:\d+).(\d+:\d+)?\n?\s?(\D+)$/)
         p m
         start_time, end_time = m[1], m[2]
 
         #schedule << {date: l.first[:text], text: result[:text]}
         schedule << {date: d, start_time: start_time, end_time: end_time,
-                     context: context[1,]}
+                     context: m[3], original: result[:text]}
         break
       end
     end
