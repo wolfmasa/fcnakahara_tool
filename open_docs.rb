@@ -59,3 +59,4 @@ schedule = get_schedule_list contents_list
 require 'pp'
 pp schedule
 
+client_id = '485972520424-hfudjgnu1qb3vv09e4u0h82tq45d1oqp.apps.googleusercontent.com'
