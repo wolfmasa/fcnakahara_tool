@@ -1,17 +1,23 @@
 require 'open-uri'
-require 'pp'
 
-url = 'http://fcnakahara.nobody.jp'
-reg = %r!https://docs.google.com/spreadsheets/d/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y[^\"]+!
+class ParseGoogleDocUrl
+  TopPage = 'http://fcnakahara.nobody.jp'
+  GDocReg = %r!https://docs.google.com/spreadsheets/d/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y[^\"]+!
 
-target_url = []
-open(url) do |f|
-  target_url = f.read.scan(reg).select do |item|
-    ! item[/output=pdf/]
+  def self.getUrlList
+    target_url = []
+    open(TopPage) do |f|
+      target_url = f.read.scan(GDocReg).select do |item|
+        ! item[/output=pdf/]
+      end
+    end
+    target_url
   end
+
 end
 
-p target_url
 
-
-
+if $0 == __FILE__
+  require 'pp'
+  pp ParseGoogleDocUrl.getUrlList
+end
