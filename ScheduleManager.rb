@@ -2,7 +2,7 @@ require 'open-uri'
 require 'json'
 require 'date'
 
-class ParseGoogleDoc
+class ScheduleManager
 
   Month = 4
   Cid = '1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y'
@@ -84,7 +84,7 @@ end
 
 if $0 == __FILE__
 
-  pgd = ParseGoogleDoc.new
+  pgd = ScheduleManager.new
   events = pgd.getEvents
 
   require 'pp'

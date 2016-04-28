@@ -1,6 +1,6 @@
 require 'open-uri'
 
-class ParseGoogleDocUrl
+class ParseScheduleUrl
   TopPage = 'http://fcnakahara.nobody.jp'
   GDocReg = %r!https://docs.google.com/spreadsheets/d/1aSE2HDWMOtGMKdvuplF8zaFIJYWWGgMJ-_qtZJG322Y[^\"]+!
 
@@ -19,5 +19,5 @@ end
 
 if $0 == __FILE__
   require 'pp'
-  pp ParseGoogleDocUrl.getUrlList
+  pp ParseScheduleUrl.getUrlList
 end
