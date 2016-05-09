@@ -26,14 +26,13 @@ class EventCompare
   end
 
   def compare
-    me = @master.dup.sort
-    te = @target.dup.sort
+    te = @target.dup
 
-    me.each do |m|
+    @master.each do |m|
       same_date = te.find {|t| t.date == m.date}
       if same_date.count == 0
         @added << m
-      elsif same_date == 1
+      elsif same_date.count == 1
         if same_date.first == m
           @equal << m
         else
@@ -42,8 +41,19 @@ class EventCompare
         te.delete same_date.first
       else
         # Hit several events with same date
+        same_date.each do |sd|
+          if sd == m
+            @equal << m
+            te.delete sd
+            break
+          elsif sd.title == m.title
+            @updated << m
+            te.delete sd
+            break
+          end
+        end
       end
     end
-    @deleted << * te
+    @deleted << *te if te.count > 0
   end
 end
