@@ -1,6 +1,7 @@
 #require File.expand_path('CalendarManager.rb', File.dirname(__FILE__))
-require File.expand_path('ScheduleManager.rb', File.dirname(__FILE__))
-require File.expand_path('ParseScheduleUrl.rb', File.dirname(__FILE__))
+require './ScheduleManager.rb'
+require './ParseScheduleUrl.rb'
+require './EventCompare'
 require 'pp'
 
 class SyncSchedule
@@ -17,12 +18,18 @@ class SyncSchedule
     @master = ScheduleManager.new
     events = @master.getEvents
     pp events if @@debug
+    events
   end
 end
 
 if $0 == __FILE__
   ss = SyncSchedule.new
+  master_list = []
   ss.getGDocUrls.each do |u|
-    ss.getEventsFromMasterCalendar u
+    events = ss.getEventsFromMasterCalendar u
+    events.each do |e|
+      master_list << Event.new(e[:date], e[:start_time], e[:end_time], e[:context], e[:location])
+    end
   end
+  pp master_list
 end

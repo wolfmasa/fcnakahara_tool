@@ -1,5 +1,5 @@
 class Event
-  attr_accessor: date, start_time, end_time, title, location
+  attr_accessor :date, :start_time, :end_time, :title, :location
   def initialize date, start_time, end_time, title, location
     @date = date
     @start_time = start_time
@@ -14,7 +14,7 @@ class Event
 end
 
 class EventCompare
-  attr_accessor: equal, updated, added, deleted
+  attr_accessor :equal, :updated, :added, :deleted
 
   def initialize master, target
     @master = master
@@ -54,6 +54,6 @@ class EventCompare
         end
       end
     end
-    @deleted << *te if te.count > 0
+    @deleted += te if te.count > 0
   end
 end
