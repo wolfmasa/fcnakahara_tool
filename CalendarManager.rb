@@ -1,8 +1,10 @@
 require 'google/apis/calendar_v3'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
+require './EventCompare.rb'
 
 require 'fileutils'
+require 'pp'
 
 OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
 APPLICATION_NAME = 'Google Calendar API Ruby Quickstart'
@@ -62,19 +64,15 @@ class CalendarManager
 
     puts "Upcoming events:"
     puts "No upcoming events found" if response.items.empty?
-    result_list = []
+    event_list = []
     response.items.each do |event|
-      start_time = event.start.date || event.start.date_time
-      end_time   = event.end.date || event.end.date_time
+      start_time = event.start.date_time.to_time
+      end_time   = event.end.date_time.to_time
       puts "- #{event.summary} (#{start_time} - #{end_time}) @ #{event.location}"
-      result_list << {
-        text: event.summary,
-        start: start_time,
-        end: end_time,
-        location: event.location
-      }
+      event_list << Event.new(start_time, start_time, end_time, event.summary, event.location)
+
     end
-    result_list
+    event_list
   end
 
   def addEvent
@@ -98,5 +96,5 @@ class CalendarManager
 end
 
 cm = CalendarManager.new
-#cm.GetCalendarList
-cm.addEvent
+pp cm.GetCalendarList
+#cm.addEvent
