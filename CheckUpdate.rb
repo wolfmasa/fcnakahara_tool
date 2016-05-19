@@ -8,9 +8,11 @@ Debug = true
 
 class CheckUpdate
 
-  def self.getGDocUrls
+  def self.getGDocUrlInfo
     @gdoc_urls = ParseScheduleUrl.getUrlList
+    @gdoc_dates = ParseScheduleUrl.getDateList
     pp @gdoc_urls if Debug
+    pp @gdoc_dates if Debug
   end
 
   def self.getEventsFromMasterCalendar url=nil
@@ -21,5 +23,3 @@ class CheckUpdate
   end
 end
 
-
-p ParseScheduleUrl.getDateList
