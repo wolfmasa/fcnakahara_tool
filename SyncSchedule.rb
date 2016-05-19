@@ -1,4 +1,4 @@
-#require File.expand_path('CalendarManager.rb', File.dirname(__FILE__))
+require './CalendarManager.rb'
 require './ScheduleManager.rb'
 require './ParseScheduleUrl.rb'
 require './EventCompare'
